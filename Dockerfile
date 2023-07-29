@@ -22,7 +22,6 @@ RUN echo "alias l='ls -CF'" >> $HOME/.bashrc
 RUN echo "alias q='exit'" >> $HOME/.bashrc
 RUN echo "alias c='clear'" >> $HOME/.bashrc
 
-CMD [ "/bin/bash" ]
-
 COPY . ./
-ENTRYPOINT [ "./entrypoint.sh" ]
+
+CMD [ "/bin/bash" ]

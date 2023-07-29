@@ -16,6 +16,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    entrypoint: ./entrypoint.sh
     environment:
       DB_HOST: db
       DB_NAME: luizalabsdb
