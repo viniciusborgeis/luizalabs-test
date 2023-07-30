@@ -38,7 +38,7 @@ gem 'rack-cors', '~> 2.0', '>= 2.0.1'
 
 gem 'devise', '~> 4.9', '>= 4.9.2'
 gem 'devise-jwt', '~> 0.11.0'
-gem 'fast_jsonapi', '~> 1.5'
+gem 'jsonapi-serializer', '~> 2.2'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
