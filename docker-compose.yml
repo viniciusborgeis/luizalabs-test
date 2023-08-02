@@ -16,6 +16,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    entrypoint: ./entrypoint.sh
     environment:
       DB_HOST: db
       DB_NAME: luizalabsdb
@@ -25,6 +26,8 @@ services:
       - .:/app:cached
     ports:
       - "3000:3000"
+    stdin_open: true
+    tty: true
     depends_on:
       - db
 
