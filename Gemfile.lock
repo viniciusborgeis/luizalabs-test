@@ -1,5 +1,5 @@
 GEM
-  remote: https://rubygems.org/
+  remote: http://rubygems.org/
   specs:
     actioncable (7.0.6)
       actionpack (= 7.0.6)
@@ -95,8 +95,6 @@ GEM
       concurrent-ruby (~> 1.0)
       zeitwerk (~> 2.6)
     erubi (1.12.0)
-    fast_jsonapi (1.5)
-      activesupport (>= 4.2)
     globalid (1.1.0)
       activesupport (>= 5.0)
     i18n (1.14.1)
@@ -104,6 +102,8 @@ GEM
     io-console (0.6.0)
     irb (1.7.4)
       reline (>= 0.3.6)
+    jsonapi-serializer (2.2.0)
+      activesupport (>= 4.2)
     jwt (2.7.1)
     loofah (2.21.3)
       crass (~> 1.0.2)
@@ -191,6 +191,7 @@ GEM
     zeitwerk (2.6.8)
 
 PLATFORMS
+  x86_64-linux
   x86_64-linux-musl
 
 DEPENDENCIES
@@ -198,7 +199,7 @@ DEPENDENCIES
   debug
   devise (~> 4.9, >= 4.9.2)
   devise-jwt (~> 0.11.0)
-  fast_jsonapi (~> 1.5)
+  jsonapi-serializer (~> 2.2)
   pg (~> 1.1)
   puma (~> 5.0)
   rack-cors (~> 2.0, >= 2.0.1)
