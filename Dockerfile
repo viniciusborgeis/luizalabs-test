@@ -1,6 +1,6 @@
-FROM ruby:3.2.2-alpine3.18
+FROM ruby:3.2.2
 
-RUN apk add --update build-base bash bash-completion libffi-dev tzdata postgresql-client postgresql-dev git
+RUN apt-get update -qq && apt-get install -y build-essential ca-certificates bash bash-completion libffi-dev tzdata postgresql-client git
 
 RUN git config --global init.defaultBranch main
 
