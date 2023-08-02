@@ -1,6 +1,7 @@
 class Competition < ApplicationRecord
     belongs_to :user
     has_many :participant
+    has_many :result
 
     validates :name, :end_date, :unit_of_measurement, presence: true
     validates :name, uniqueness: true

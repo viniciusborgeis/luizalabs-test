@@ -7,7 +7,7 @@ class User < ApplicationRecord
 
   has_many :competitions
   has_many :participants
-  has_many :participated_competitions, through: :participants, source: :competition
+  has_many :results
 
   validates :name, :role, presence: true
   validates :password, length: 6..15
