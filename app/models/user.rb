@@ -5,7 +5,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: self
 
-  has_many :competitions, dependent: :destroy
+  has_many :competitions
+  has_many :participants
+  has_many :participated_competitions, through: :participants, source: :competition
 
   validates :name, :role, presence: true
   validates :password, length: 6..15
