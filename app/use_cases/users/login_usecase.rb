@@ -1,4 +1,4 @@
-class LoginUsecase
+class Users::LoginUsecase
     def initialize(email, password)
       @email = email
       @password = password

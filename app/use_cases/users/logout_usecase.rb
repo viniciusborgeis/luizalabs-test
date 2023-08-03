@@ -1,4 +1,4 @@
-class LogoutUsecase
+class Users::LogoutUsecase
     def initialize(token)
         @token = token
     end
@@ -6,6 +6,7 @@ class LogoutUsecase
     def execute
         user = User.find_by(jti: decoded_token['jti'])
         return unless user
+        
         user
     end
 

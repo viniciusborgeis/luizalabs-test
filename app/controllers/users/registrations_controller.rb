@@ -7,22 +7,20 @@ class Users::RegistrationsController < Devise::RegistrationsController
   before_action :check_valid_type, only: [:create]
 
   def create
-    user = SignupUsecase.new(sign_up_params).execute
-
-    if user.is_a?(User)
-      sign_in(user)
-      render json: UserPresenter.new(user, 200).signup_success, status: :ok
-    else
-      render json: UserPresenter.new(user, 422).signup_failed, status: :unprocessable_entity
-    end
+    user = Users::SignupUsecase.new(sign_up_params).execute
+    response, code = UserPresenter.new(user, 201, 422).sing_up
+    
+    render json: response, status: code
   end
 
   private
 
   def check_valid_type
     is_valid = User.roles.include?(params[:user][:role])
-
-    render json: UserPresenter.new(nil, 422).generic_error('Invalid or missing user role.'), status: :unprocessable_entity unless is_valid
+    message = 'Invalid or missing user role. only accept <athlete> or <committee>'
+    response, code = UserPresenter.new(nil, nil, 422).generic_error(message)
+    
+    render json: response, status: code unless is_valid
   end
 
 end

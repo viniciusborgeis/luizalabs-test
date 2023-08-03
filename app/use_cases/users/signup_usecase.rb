@@ -1,4 +1,4 @@
-class SignupUsecase
+class Users::SignupUsecase
     def initialize(user_params)
         @user_params = user_params
     end

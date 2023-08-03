@@ -8,4 +8,10 @@ Rails.application.routes.draw do
     sessions: 'users/sessions',
     registrations: 'users/registrations'
   }
+
+  resources :competitions, only: [:create, :index, :show] do
+    patch 'close', on: :member, to: 'competitions#close'
+  end
+
+
 end

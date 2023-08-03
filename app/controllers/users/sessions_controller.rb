@@ -5,14 +5,11 @@ class Users::SessionsController < Devise::SessionsController
   respond_to :json
 
   def create
-    user = LoginUsecase.new(sign_in_params[:email], sign_in_params[:password]).execute
-
-    if user
-      sign_in(user)
-      render json: UserPresenter.new(user, 200).login_success, status: :ok
-    else
-      render json: UserPresenter.new(user, 401).login_failed, status: :unauthorized
-    end
+    user = Users::LoginUsecase.new(sign_in_params[:email], sign_in_params[:password]).execute
+    sign_in(user) if user
+    response, code = UserPresenter.new(user, 200, 401).login
+    
+    render json: response, status: code
   end
   
   private
@@ -22,12 +19,9 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def respond_to_on_destroy
-    user = LogoutUsecase.new(token_from_request).execute
+    user = Users::LogoutUsecase.new(token_from_request).execute
+    response, code = UserPresenter.new(user, 200, 401).logout
 
-    if user
-      render json: UserPresenter.new(user, 200).logout_success, status: :ok
-    else
-      render json: UserPresenter.new(user, 401).logout_failed, status: :unauthorized
-    end
+    render json: response, status: code
   end
 end
