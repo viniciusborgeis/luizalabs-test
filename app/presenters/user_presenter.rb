@@ -46,7 +46,7 @@ class UserPresenter < DefaultPresenter
     end
 
     def signup_failed(message = 'User could not be created successfully.')
-        errors_list = user.errors.map {|error| error.message}.uniq.to_sentence
+        errors_list = user.errors.map {|error| error.full_message}.uniq.to_sentence
         response(message, code_error, { errors: errors_list })
     end
 
