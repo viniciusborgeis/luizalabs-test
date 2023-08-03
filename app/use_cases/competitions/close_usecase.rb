@@ -6,7 +6,7 @@ class Competitions::CloseUsecase
     def execute
         competition = Competition.find_by_id(id)
 
-        competition if competition.is_a?(Competition) && competition.update_attribute(:end_date, Time.now)
+        competition if competition.is_a?(Competition) && competition.update_attribute(:closed, true)
     end
 
     private
