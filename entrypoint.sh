@@ -5,7 +5,6 @@ if [ -f /app/tmp/pids/server.pid ]; then
   rm /app/tmp/pids/server.pid
 fi
 
-# Verifica se o banco de dados já existe
 if rails db:version &>/dev/null; then
   echo "The database Exists. Executing migrations..."
   rails db:migrate
