@@ -34,6 +34,6 @@ class CompetitionsController < ApplicationController
     private
 
     def competition_parameters
-        competition_params = params.require(:competition).permit(:name, :unit_of_measurement, :end_date)
+        competition_params = params.require(:competition).permit(:name, :modality_id)
     end
 end
