@@ -13,5 +13,6 @@ Rails.application.routes.draw do
     patch 'close', on: :member, to: 'competitions#close'
   end
 
+  resources :modalities, only: [:create, :index, :show]
 
 end

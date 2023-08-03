@@ -24,6 +24,9 @@ class CompetitionPresenter < DefaultPresenter
     
     private
 
+    attr_reader :competition, :code_success, :code_error
+
+
     def index_success
         response('Competitions retrieved successfully.', code_success, { competitions: competition_data })
     end
@@ -61,7 +64,7 @@ class CompetitionPresenter < DefaultPresenter
 
     def default_error(message)
         if competition.is_a?(ActiveModel::Errors)
-            errors_list = competition.errors&.map {|error| error.message}.uniq.to_sentence if competition.errors
+            errors_list = competition.errors&.map {|error| error.full_message}.uniq.to_sentence if competition.errors
             return response(message, code_error, { errors: errors_list }) unless errors_list.nil?
         end
         response(message, code_error)
@@ -78,6 +81,4 @@ class CompetitionPresenter < DefaultPresenter
     def competition_data_hash(competition)
         CompetitionSerializer.new(competition).serializable_hash[:data][:attributes]
     end
-
-    attr_reader :competition, :code_success, :code_error
 end
