@@ -8,10 +8,10 @@ class Users::SessionsController < Devise::SessionsController
     user = Users::LoginUsecase.new(sign_in_params[:email], sign_in_params[:password]).execute
     sign_in(user) if user
     response, code = UserPresenter.new(user, 200, 401).login
-    
+
     render json: response, status: code
   end
-  
+
   private
 
   def token_from_request

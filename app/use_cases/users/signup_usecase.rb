@@ -1,15 +1,13 @@
 class Users::SignupUsecase
-    def initialize(user_params)
-        @user_params = user_params
-    end
+  def initialize(user_params)
+    @user_params = user_params
+  end
 
-    def execute
-        user = User.new(user_params)
+  def execute
+    UserGateway.new.sign_up(user_params)
+  end
 
-        user.save ? user : user.errors
-    end
+  private
 
-    private
-
-    attr_reader :user_params
+  attr_reader :user_params
 end
