@@ -1,15 +1,13 @@
 class Competitions::CloseUsecase
-    def initialize(id)
-        @id = id
-    end
+  def initialize(id)
+    @id = id
+  end
 
-    def execute
-        competition = Competition.find_by_id(id)
+  def execute
+    CompetitionGateway.new.close(id)
+  end
 
-        competition if competition.is_a?(Competition) && competition.update_attribute(:closed, true)
-    end
+  private
 
-    private
-
-    attr_reader :id
+  attr_reader :id
 end

@@ -1,39 +1,41 @@
 class CompetitionsController < ApplicationController
-    before_action :authenticate_user!, except: [:index, :show]
+  before_action :authenticate_user!, except: %i[index show]
 
-    def index
-        competitions = Competition.all
-        response, code = CompetitionPresenter.new(competitions).index
+  def index
+    competitions = Competitions::ShowAllUsecase.new.execute
+    response, code = CompetitionPresenter.new(competitions).index({ show_all: true })
 
-        render json: response, status: code
-    end
+    render json: response, status: code
+  end
 
-    def show
-        competition = Competition.find_by_id(params[:id])
-        response, code = CompetitionPresenter.new(competition).show
+  def show
+    competition = Competitions::ShowUsecase.new.execute(params[:id])
+    response, code = CompetitionPresenter.new(competition).show({ show: true })
 
-        render json: response, status: code
-    end
+    render json: response, status: code
+  end
 
-    def create
-        params  = { user_id: current_user.id }.merge(competition_parameters)
+  def create
+    authorize current_user, policy_class: CompetitionPolicy
 
-        competition = Competitions::CreateUsecase.new(params).execute
-        response, code = CompetitionPresenter.new(competition, 201, 422).create
+    competition = Competitions::CreateUsecase.new(current_user, competition_parameters).execute
+    response, code = CompetitionPresenter.new(competition, 201, 422).create
 
-        render json: response, status: code
-    end
+    render json: response, status: code
+  end
 
-    def close
-        competition = Competitions::CloseUsecase.new(params[:id]).execute
-        response, code = CompetitionPresenter.new(competition).close
+  def close
+    authorize current_user, policy_class: CompetitionPolicy
 
-        render json: response, status: code
-    end
+    competition = Competitions::CloseUsecase.new(params[:id]).execute
+    response, code = CompetitionPresenter.new(competition).close
 
-    private
+    render json: response, status: code
+  end
 
-    def competition_parameters
-        competition_params = params.require(:competition).permit(:name, :modality_id)
-    end
+  private
+
+  def competition_parameters
+    params.require(:competition).permit(:name, :modality_id)
+  end
 end

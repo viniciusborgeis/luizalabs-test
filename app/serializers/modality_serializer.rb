@@ -1,4 +1,4 @@
 class ModalitySerializer
-    include JSONAPI::Serializer
-    attributes :id, :name, :unit
+  include JSONAPI::Serializer
+  attributes :id, :name, :unit
 end

@@ -1,15 +1,14 @@
 class Competitions::CreateUsecase
-    def initialize(competition_params)
-        @competition_params = competition_params
-    end
+  def initialize(user, competition_params)
+    @user = user
+    @competition_params = competition_params
+  end
 
-    def execute
-        competition = Competition.new(competition_params)
+  def execute
+    CompetitionGateway.new.create({ user_id: user.id }.merge(competition_params))
+  end
 
-        competition.save ? competition : competition.errors
-    end
+  private
 
-    private
-
-    attr_reader :competition_params, :user
+  attr_reader :user, :competition_params
 end

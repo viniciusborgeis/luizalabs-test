@@ -1,18 +1,14 @@
 class Users::LoginUsecase
-    def initialize(email, password)
-      @email = email
-      @password = password
-    end
-  
-    def execute
-      user = User.find_for_database_authentication(email: email)
-      return nil unless user
-      return nil unless user.valid_password?(password)
-  
-      user
-    end
-  
-    private
-  
-    attr_reader :email, :password
+  def initialize(email, password)
+    @email = email
+    @password = password
   end
+
+  def execute
+    UserGateway.new.login(email, password)
+  end
+
+  private
+
+  attr_reader :email, :password
+end
