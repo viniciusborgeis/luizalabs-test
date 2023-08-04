@@ -12,6 +12,6 @@ class ResultsController < ApplicationController
   private
 
   def result_parameters
-    params.require(:result).permit(:id, :value)
+    params.permit(:value)
   end
 end

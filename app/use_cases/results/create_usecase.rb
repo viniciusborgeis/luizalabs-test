@@ -14,6 +14,7 @@ class Results::CreateUsecase
   private
 
   def validations
+    return false unless competition
     return false if competition_closed?
     return false if competition_throwing_darts? && user_has_three_or_more_results?
 
