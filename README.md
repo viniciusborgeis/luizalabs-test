@@ -21,7 +21,7 @@
   <a href="#endpoints">Endpoints</a> •
   <a href="#setup">Setup</a> •
   <a href="#tests">Tests</a> •
-  <a href="#usage">Usage</a>
+  <a href="#gitflow">Gitflow</a>
 </p>
 <sub>Project writed for luizalabs test, fully created in ruby on rails, follow the best clean architecture pratices.</sub>
 
@@ -50,6 +50,14 @@
         - [Get All](#get-all-1)
         - [Show](#show-1)
         - [Close](#close)
+        - [Result](#result)
+    - [Setup](#setup)
+    - [Tests](#tests)
+    - [Gitflow](#gitflow)
+        - [Branch Naming Conventions](#branch-naming-conventions)
+        - [Commit Message Guidelines](#commit-message-guidelines)
+        - [Gitflow Workflow](#gitflow-workflow)
+
 
 
 ## Ruby Version
@@ -612,3 +620,167 @@ Welcome to the Olympic Games API! This README provides a comprehensive overview 
             }
         }
         ```
+
+#### Result
+**<sub>Only <strong>athlete</strong> user can create a result</sub>
+
+- **Endpoint**: `/competitions/:id/results`
+- **Headers**: `{ "Authorization": "Bearer <TOKEN>" }`
+- **Http Verb**: `POST`
+- **Request Body**:
+    ```json
+    {
+        "value": 25.4
+    }
+    ```
+- **Success Response**:
+    ```json
+    {
+        "status": {
+            "code": 201,
+            "message": "Result created successfully."
+        },
+        "data": {
+            "result": {
+                "id": 3,
+                "user_id": 1,
+                "competition_id": 2,
+                "value": 25.4
+            }
+        }
+    }
+    ```
+- **Error Responses**:
+    - Missing Competition:
+        ```json
+        {
+            "status": 422,
+            "message": "Result could not be created successfully."
+        }
+        ```
+    - Missing Field Value:
+        ```json
+        {
+            "status": 422,
+            "message": "Result could not be created successfully."
+        }
+        ```
+    - Wrong user type:
+        ```json
+        {
+            "status": {
+                "code": 403,
+                "message": "You are not authorized to perform this action."
+            }
+        }
+        ```
+
+## Setup
+
+### Prerequisites
+
+Before you begin, make sure you have the following software installed on your machine:
+
+- Docker: Install [Docker](https://docs.docker.com/get-docker/)
+- Docker Compose: Install [Docker Compose](https://docs.docker.com/compose/install/)
+
+### Steps
+
+1. **Clone the Repository**
+
+    ```bash
+    git clone https://github.com/viniciusborgeis/luizalabs-test
+    ```
+
+2. **Navigate to Project Directory**
+
+    ```bash
+    cd luizalabs-test
+    ```
+
+3. **Build the Project using docker-compose code below**
+    ```bash
+    docker-compose build --no-cache
+    ```
+
+4. **Configure a database with the following codes below, it is important that you write one after the other**
+    ```bash
+    docker-compose run --entrypoint=/bin/bash app -c "rails db:create"
+    docker-compose run --entrypoint=/bin/bash app -c "rails db:migrate"
+    ```
+
+5. **(OPTIONAL) if you want to populate the data base with some pre-programmed data, type the code below in your terminal and enter**
+    ```bash
+    docker-compose run --entrypoint=/bin/bash app -c "rails db:seed"
+    ```
+
+6. **Finally run your project with the command below:**
+    ```bash
+    docker-compose up
+    ```
+
+    just it, have a fun! :)
+
+## Tests
+
+To run the tests, just type the following code below:
+```bash
+    docker-compose run --entrypoint=/bin/bash app -c "rspec"
+```
+
+## Gitflow
+This docs provides a clear overview of our Git workflow, including branch naming conventions and commit message guidelines. Following this workflow ensures a structured and organized development process for our project.
+
+### Branch Naming Conventions
+We use a consistent branch naming convention to easily identify the purpose and context of each branch:
+
+- **Feature Branches**: `feature/<feature-name>`
+- **fix Branches**: `fix/<bug-name>`
+- **Hotfix Branches**: `hotfix/<hotfix-name>`
+- **Release Branches**: `release/<version-number>`
+- **Main Development Branch**: `develop`
+- **Main Production Branch**: `main (or master if preferred)`
+
+For example:
+
+- Creating a new feature: `git checkout -b feature/user-authentication`
+- Fixing a bug: `git checkout -b fix/incorrect-calculation`
+- Preparing a new release: `git checkout -b release/v1.0.0`
+
+### Commit Message Guidelines
+
+To maintain a clear commit history and make collaboration smoother, we follow these commit message guidelines:
+
+- Use present tense: Write commit messages in the present tense (e.g., "Add user authentication").
+- Be concise: Keep commit messages concise and focused on the change being made.
+- Provide context: Explain why a change is being made and what problem it solves.
+- Use headings: Use headings for your commit messages to categorize them (e.g., "Feature:", "Bugfix:", "Refactor:").
+- Reference issues: If applicable, reference related issues or tasks using issue numbers (e.g., "Fix #123:").
+
+Here's an example of a well-formatted commit message:
+
+```bash
+Feature: Implement user authentication
+
+Add user authentication using Devise gem. This adds secure
+authentication functionality to the API, enabling users to sign up,
+log in, and log out. Fixes issue #123.
+```
+
+### Gitflow Workflow
+
+1. **Branch Creation**: Start by creating a new branch for the task you're working on using the appropriate branch naming convention.
+
+2. **Commit**: Make your changes, and commit them with meaningful commit messages following the guidelines mentioned above.
+
+3. **Pull Request (PR)**: Once your feature or fix is ready, open a Pull Request from your branch to the develop branch.
+
+4. **Code Review***: Collaborators review your code. Address feedback and make necessary changes.
+
+5. **Merge to Develop**: Once the PR is approved, merge your branch into the develop branch.
+
+6. **Release**: When a set of features are ready for release, create a release branch from develop. Test and finalize the release.
+
+7. **Merge to Main**: Merge the release branch into main (or master).
+
+8. **Tagging**: After merging to main, create a version tag (e.g., v1.0.0) to mark the release.
