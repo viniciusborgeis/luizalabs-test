@@ -14,15 +14,43 @@
 </p>
 
 <p align="center">
+  <a href="#index">Index</a> •
   <a href="#ruby-version">Ruby Version</a> •
   <a href="#what-do-i-do">What do i do</a> •
   <a href="#clean-architecture-overview">Architecture Overview</a> •
   <a href="#endpoints">Endpoints</a> •
-  <a href="#installation">Setup</a> •
-  <a href="#installation">Tests</a> •
+  <a href="#setup">Setup</a> •
+  <a href="#tests">Tests</a> •
   <a href="#usage">Usage</a>
 </p>
-<sub>Project writed for luizalabs test, fully created in ruby on rails, follow the best clean archtecture pratices.</sub>
+<sub>Project writed for luizalabs test, fully created in ruby on rails, follow the best clean architecture pratices.</sub>
+
+## Index
+- [Ruby Version](#version)
+  - [What do i do](#what-do-i-do)
+  - [Architecture Overview](#clean-architecture-overview)
+    - [Clean Architecture Layers](#clean-architecture-layers)
+    - [1. Presentation Layer (Controllers)](#1-presentation-layer-controllers)
+    - [2. Use Case Layer (Interactors)](#2-use-case-layer-interactors)
+    - [3. Data Access Layer (Gateways)](#3-data-access-layer-gateways)
+    - [4. Presentation Layer (Presenters)](#4-presentation-layer-presenters)
+    - [5. Frameworks & Drivers](#5-frameworks--drivers)
+    - [Architecture Overview](#architecture-overview)
+  - [Endpoints](#endpoints)
+    - [Users](#users)
+        - [Sign-up](#signup)
+        - [Login](#login)
+        - [Logout](#logout)
+    - [Modalities](#modalities)
+        - [Create](#create)
+        - [Get All](#get-all)
+        - [Show](#show)
+    - [Competitions](#competitions)
+        - [Create](#create-1)
+        - [Get All](#get-all-1)
+        - [Show](#show-1)
+        - [Close](#close)
+
 
 ## Ruby Version
 Ruby [3.2.2] are supported and tested.
@@ -70,14 +98,14 @@ The Use Case layer contains application-specific business rules and logic. It en
 **Relationships:**
 - Communicates with Use Case Layer (Interactors).
 
-### 4. Data Access Layer (Gateways)
+### 3. Data Access Layer (Gateways)
 
 The Data Access layer abstracts interactions with external data sources, such as databases or external services. Gateways provide interfaces for retrieving and storing data without exposing implementation details.
 
 **Relationships:**
 - Communicates with Use Case Layer (Interactors).
 
-### 5. Presentation Layer (Presenters)
+### 4. Presentation Layer (Presenters)
 
 The Presenter layer is responsible for formatting and transforming data from the Use Case layer into a format suitable for display. It prepares data for rendering in different output formats, such as JSON or HTML.
 
@@ -85,7 +113,7 @@ The Presenter layer is responsible for formatting and transforming data from the
 - Communicates with Use Case Layer (Interactors).
 - Communicates with Presentation Layer (Controllers).
 
-### 6. Frameworks & Drivers
+### 5. Frameworks & Drivers
 
 The outermost layer contains external frameworks, libraries, and tools. It includes components like the web framework (Rails), the database (ActiveRecord), and external APIs. This layer adapts and communicates with the inner layers.
 
@@ -367,5 +395,220 @@ Welcome to the Olympic Games API! This README provides a comprehensive overview 
         {
             "status": 404,
             "message": "Modality not found."
+        }
+        ```
+
+### Competitions
+- **Endpoint**: `/competitions`
+
+#### Create
+**<sub>Only <strong>committee</strong> user can create a modality</sub>
+
+- **Headers**: `{ "Authorization": "Bearer <TOKEN>" }`
+- **Http Verb**: `POST`
+- **Request Body**:
+    ```json
+    {
+        "name": "Competition 2",
+        "modality_id": 1
+    }
+    ```
+- **Success Response**:
+    ```json
+    {
+        "status": {
+            "code": 201,
+            "message": "Competition created successfully."
+        },
+        "data": {
+            "competition": {
+                "id": 1,
+                "name": "Running Competition",
+                "closed": false,
+                "modality": {
+                    "name": "100m rasos",
+                    "unit": "seconds"
+                }
+            }
+        }
+    }
+    ```
+- **Error Responses**:
+    - Missing Field Name:
+        ```json
+        {
+            "status": {
+                "code": 422,
+                "message": "Competition could not be created successfully."
+            },
+            "data": {
+                "errors": "Name can't be blank"
+            }
+        }
+        ```
+    - Missing Field Modality_Id:
+        ```json
+        {
+            "status": {
+                "code": 422,
+                "message": "Competition could not be created successfully."
+            },
+            "data": {
+                "errors": "Modality must exist, Modality can't be blank, and Modality is not included in the list"
+            }
+        }
+        ```
+    - Wrong User Type:
+        ```json
+        {
+            "status": {
+                "code": 403,
+                "message": "You are not authorized to perform this action."
+            }
+        }
+        ```
+
+#### Get all
+**<sub>Winner <strong>ONLY</strong> show when competition is closed</sub>
+
+
+- **Http Verb**: `GET`
+- **Success Response**:
+    ```json
+    {
+        "status": {
+            "code": 200,
+            "message": "Competitions retrieved successfully."
+        },
+        "data": {
+            "competitions": [
+                {
+                    "id": 2,
+                    "name": "Competição Precisao Dardos",
+                    "closed": false,
+                    "modality": {
+                        "name": "Lançamento de Dardo",
+                        "unit": "meters"
+                    },
+                    "participants": 1,
+                    "winner": [],
+                    "best_results": [
+                        25.4,
+                        25.4,
+                        25.4
+                    ]
+                },
+                {
+                    "id": 1,
+                    "name": "Competição 100m rasos 4",
+                    "closed": true,
+                    "modality": {
+                        "name": "100m rasos",
+                        "unit": "seconds"
+                    },
+                    "participants": 0,
+                    "winner": [],
+                    "best_results": []
+                }
+            ]
+        }
+    }
+    ```
+
+#### Show
+**<sub>Winner <strong>ONLY</strong> show when competition is closed</sub>
+
+
+- **Endpoint**: `/competitions/:id`
+- **Http Verb**: `GET`
+- **Success Response**:
+    ```json
+    {
+        "status": {
+            "code": 200,
+            "message": "Competition retrieved successfully."
+        },
+        "data": {
+            "competition": {
+                "id": 2,
+                "name": "Competição Precisao Dardos",
+                "closed": false,
+                "modality": {
+                    "name": "Lançamento de Dardo",
+                    "unit": "meters"
+                },
+                "participants": 1,
+                "winner": [],
+                "all_results": [
+                    {
+                        "id": 1,
+                        "name": "athlete",
+                        "value": 25.4
+                    },
+                    {
+                        "id": 1,
+                        "name": "athlete",
+                        "value": 25.4
+                    },
+                    {
+                        "id": 1,
+                        "name": "athlete",
+                        "value": 25.4
+                    }
+                ]
+            }
+        }
+    }
+    ```
+- **Error Responses**:
+    - Missing Competition:
+        ```json
+        {
+            "status": 404,
+            "message": "Competition not found."
+        }
+        ```
+
+#### Close
+**<sub>Only <strong>COMMITTEE</strong> user can close a competition</sub>
+
+
+- **Endpoint**: `/competitions/:id/close`
+- **Http Verb**: `PATCH`
+- **Success Response**:
+    ```json
+    {
+        "status": {
+            "code": 200,
+            "message": "Competition closed successfully."
+        },
+        "data": {
+            "competition": {
+                "id": 2,
+                "name": "Competição Precisao Dardos",
+                "closed": true,
+                "modality": {
+                    "name": "Lançamento de Dardo",
+                    "unit": "meters"
+                }
+            }
+        }
+    }
+    ```
+- **Error Responses**:
+    - Missing Competition:
+        ```json
+        {
+            "status": 404,
+            "message": "Competition could not be closed successfully."
+        }
+        ```
+    - Wrong user type:
+        ```json
+        {
+            "status": {
+                "code": 403,
+                "message": "You are not authorized to perform this action."
+            }
         }
         ```
