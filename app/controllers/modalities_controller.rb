@@ -27,6 +27,6 @@ class ModalitiesController < ApplicationController
   private
 
   def modality_params
-    params.require(:modality).permit(:name, :unit)
+    params.permit(:name, :unit)
   end
 end
