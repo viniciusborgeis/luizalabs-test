@@ -51,5 +51,7 @@ end
 
 group :test do
   gem 'factory_bot_rails', '~> 6.2'
+  gem 'simplecov', '~> 0.21.2'
+  gem 'simplecov-shields-badge', require: false
 end
 

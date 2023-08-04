@@ -29,7 +29,12 @@ class CompetitionGateway
   end
 
   def close(competition)
-    competition if competition.is_a?(Competition) && competition.update_attribute(:closed, true)
+    comp = Competition.find_by_id(competition)
+    return unless comp && comp.closed == false
+
+    comp.update_attribute(:closed, true)
+
+    comp
   end
 
   private
